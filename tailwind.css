@@ -1,0 +1,136 @@
+/* Tailwind CSS styles (merge as needed) */
+
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .all-\[unset\] {
+    all: unset;
+  }
+}
+
+:root {
+  --button-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  --carbon-darkest: rgba(36, 38, 43, 1);
+  --carbon-neutral300: rgba(214, 217, 221, 1);
+  --graysblack: rgba(0, 0, 0, 1);
+  --lighttexttextprimary: rgba(22, 24, 35, 1);
+  --m3-label-large-font-family: "Roboto", Helvetica;
+  --m3-label-large-font-size: 14px;
+  --m3-label-large-font-style: normal;
+  --m3-label-large-font-weight: 500;
+  --m3-label-large-letter-spacing: 0.10000000149011612px;
+  --m3-label-large-line-height: 20px;
+  --m3sysdark-high-contraston-secondary-fixed-variant: rgba(27, 9, 66, 1);
+  --m3sysdarkon-primary-fixed: rgba(33, 0, 93, 1);
+  --m3syslighton-primary: rgba(255, 255, 255, 1);
+  --m3syslighton-surface: rgba(29, 27, 32, 1);
+  --m3syslighton-surface-variant: rgba(73, 69, 79, 1);
+  --m3syslightoutline-variant: rgba(202, 196, 208, 1);
+  --presets-body2-font-family: "Inter", Helvetica;
+  --presets-body2-font-size: 16px;
+  --presets-body2-font-style: normal;
+  --presets-body2-font-weight: 400;
+  --presets-body2-letter-spacing: 0px;
+  --presets-body2-line-height: 24px;
+  --small-text-font-family: "Inter", Helvetica;
+  --small-text-font-size: 16px;
+  --small-text-font-style: normal;
+  --small-text-font-weight: 500;
+  --small-text-letter-spacing: 0px;
+  --small-text-line-height: 150%;
+  --subheadline-emphasized-font-family: "SF Pro", Helvetica;
+  --subheadline-emphasized-font-size: 15px;
+  --subheadline-emphasized-font-style: normal;
+  --subheadline-emphasized-font-weight: 400;
+  --subheadline-emphasized-letter-spacing: -0.23000000417232513px;
+  --subheadline-emphasized-line-height: 20px;
+  --subheadline-regular-font-family: "SF Pro", Helvetica;
+  --subheadline-regular-font-size: 15px;
+  --subheadline-regular-font-style: normal;
+  --subheadline-regular-font-weight: 400;
+  --subheadline-regular-letter-spacing: -0.23000000417232513px;
+  --subheadline-regular-line-height: 20px;
+  --systemorange-light: rgba(255, 149, 0, 1);
+  --vibrant-labelsvibrant-secondary: rgba(127, 127, 127, 0.5);
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --card: transparent;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 100% 50%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 215 20.2% 65.1%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 224 71% 4%;
+    --foreground: 213 31% 91%;
+
+    --muted: 223 47% 11%;
+    --muted-foreground: 215.4 16.3% 56.9%;
+
+    --accent: 216 34% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --popover: 224 71% 4%;
+    --popover-foreground: 215 20.2% 65.1%;
+
+    --border: 216 34% 17%;
+    --input: 216 34% 17%;
+
+    --card: transparent;
+    --card-foreground: 213 31% 91%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 1.2%;
+
+    --secondary: 222.2 47.4% 11.2%;
+    --secondary-foreground: 210 40% 98%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --ring: 216 34% 17%;
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
