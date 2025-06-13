@@ -4,7 +4,7 @@ import { Card, CardContent } from "../../../../components/ui/card";
 export const FamilyMembersSection = (): JSX.Element => {
   return (
     <Card className="flex flex-col items-start gap-2 p-4 border border-[#dfdfdf] rounded-lg">
-      <CardContent className="p-0 space-y-2">
+      <CardContent className="p-0 space-y-0.5">
         <h3 className="font-semibold text-sm text-black font-sans leading-[19.6px]">
           Items Expired
         </h3>

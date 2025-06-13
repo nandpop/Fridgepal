@@ -1,171 +1,223 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import {
+	HomeIcon,
+	PackageIcon,
+	ShoppingCartIcon,
+	SearchIcon,
+	BellIcon,
+	UserIcon,
+} from "lucide-react";
 
 // Data for frequently bought items
 const frequentlyBoughtItems = [
-	{ id: 1, name: "Pear", image: "/image-2.svg" },
-	{ id: 2, name: "Watermelon", image: "/image-3.svg" },
-	{ id: 3, name: "Multi-Grain Bread", image: "/image.svg" },
-	{ id: 4, name: "Maggi", image: "/image-1.svg" },
+	{ id: 1, name: "Pear", image: "/pear.jpg" },
+	{ id: 2, name: "Watermelon", image: "/watermelon.jpg" },
+	{ id: 3, name: "Multi-Grain Bread", image: "/bread.jpg" },
+	{ id: 4, name: "Maggi", image: "/maggi.jpg" },
 ];
 
 // Data for wishlist items
 const wishlistItems = [
-	{ id: 1, name: "Banana", quantity: 2 },
-	{ id: 2, name: "Paneer", quantity: 1 },
-	{ id: 3, name: "Frozen Roti", quantity: 1 },
+	{ id: 1, name: "Banana", quantity: 2, image: "/banana.jpeg" },
+	{ id: 2, name: "Paneer", quantity: 1, image: "/paneer.jpg" },
+	{ id: 3, name: "Roti", quantity: 1, image: "/roti.jpg" },
 ];
 
 export const ToBuy = ({
 	onNavigate,
+	setShoppingAt
 }: {
-	onNavigate?: (page: "home" | "inventory" | "tobuy") => void;
+	onNavigate?: (page: "home" | "inventory" | "tobuy" | "activity" | "profile" | "checkout") => void;
+	setShoppingAt?: (service: "Zepto" | "Blinkit") => void;
 }): JSX.Element => {
+	const [currentTime, setCurrentTime] = useState<string>("");
+
+	useEffect(() => {
+		const updateTime = () => {
+			const now = new Date();
+			const hours = now.getHours();
+			const minutes = now.getMinutes();
+			setCurrentTime(
+				`${hours.toString().padStart(2, "0")}:${minutes
+					.toString()
+					.padStart(2, "0")}`
+			);
+		};
+		updateTime();
+		const interval = setInterval(updateTime, 60000);
+		return () => clearInterval(interval);
+	}, []);
+
 	return (
 		<div className="bg-white flex flex-row justify-center w-full">
-			<div className="bg-white overflow-hidden w-[375px] h-[812px] relative">
+			<div className="bg-white overflow-hidden w-[375px] min-h-screen flex flex-col relative">
 				{/* Status Bar */}
-				<div className="absolute w-[375px] h-11 top-0 left-0">
-					<div className="absolute w-[67px] h-[11px] top-[17px] left-[294px]">
+				<div className="w-full h-11 flex justify-between items-center px-5">
+					<div className="w-[54px] h-[21px] flex items-center justify-start">
+						<span className="font-semibold text-black text-base tracking-tight">
+							{currentTime}
+						</span>
+					</div>
+					<div className="flex items-center gap-1">
 						<img
-							className="absolute w-6 h-[11px] top-0 left-[42px]"
-							alt="Battery"
-							src="/battery.png"
-						/>
-						<img
-							className="absolute w-[15px] h-[11px] top-0 left-[22px]"
-							alt="Wifi"
-							src="/wifi.svg"
-						/>
-						<img
-							className="absolute w-[17px] h-[11px] top-0 left-0"
+							className="w-[17px] h-[11px]"
 							alt="Mobile signal"
 							src="/mobile-signal.svg"
 						/>
+						<img className="w-[15px] h-[11px]" alt="Wifi" src="/wifi.svg" />
+						<img className="w-6 h-[11px]" alt="Battery" src="/battery.png" />
 					</div>
-					<div className="absolute w-[54px] h-[21px] top-3 left-[21px] bg-[url(/time.svg)] bg-[100%_100%]" />
 				</div>
-				{/* Header */}
-				<div className="absolute w-[375px] h-16 top-0 left-0 bg-white shadow-md flex items-center justify-between px-4">
-					<div className="flex items-center">
-						<img
-							className="w-8 h-8 rounded-full"
-							alt="User"
-							src="/user-avatar.png"
-						/>
-						<div className="ml-2">
-							<p className="text-sm text-gray-500">Hello, User</p>
-							<p className="text-lg font-semibold">
-								What do you want to buy?
-							</p>
+
+				{/* Main Scrollable Content */}
+				<div className="flex-1 overflow-y-auto pb-16">
+					{/* Header */}
+					<div className="w-full text-center mt-2 mb-4">
+						<h1 className="font-semibold text-xl tracking-[-0.40px]">
+							To Buy
+						</h1>
+					</div>
+
+					{/* Search Bar */}
+					<div className="px-4 mb-4">
+						<div className="relative">
+							<SearchIcon className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+							<Input
+								className="pl-10 py-2 bg-neutral-100 rounded-lg w-full"
+								placeholder="Search"
+							/>
 						</div>
 					</div>
-					{/* <Button variant="ghost" className="p-0">
-            <BellIcon className="w-6 h-6 text-gray-500" />
-          </Button> */}
-				</div>
-				{/* Search Bar */}
-				{/* <div className="absolute w-[335px] h-12 top-16 left-4 bg-gray-100 rounded-full flex items-center px-4">
-          <SearchIcon className="w-5 h-5 text-gray-500" />
-          <Input
-            placeholder="Search for products"
-            className="bg-transparent border-0 focus:ring-0 focus:outline-none ml-2"
-          />
-        </div> */}
-				{/* Frequently Bought Items Section */}
-				<div className="absolute w-[375px] top-24 left-0">
-					<div className="px-4">
-						<h2 className="text-lg font-semibold">Frequently Bought Items</h2>
+
+					{/* Buy with section */}
+					<div className="flex justify-between items-center px-4 mb-2">
+						<span className="font-semibold text-base tracking-[-0.32px] text-black leading-5">
+							Buy with
+						</span>
+						<span className="font-semibold text-base tracking-[-0.32px] text-black leading-5">
+							Calculate Cost
+						</span>
 					</div>
-					<div className="flex overflow-x-auto py-2">
-						{frequentlyBoughtItems.map((item) => (
-							<div
-								key={item.id}
-								className="min-w-[120px] h-[120px] bg-gray-50 rounded-lg shadow-md m-2 flex flex-col items-center"
-							>
-								<img
-									className="w-[80px] h-[80px] object-cover rounded-full mt-2"
-									alt={item.name}
-									src={item.image}
-								/>
-								<p className="text-center font-semibold mt-2">{item.name}</p>
-								<Button
-									variant="default"
-									className="mt-auto mb-2 w-full rounded-full"
+
+					{/* Service Buttons */}
+					<div className="flex justify-between px-4 mb-4 gap-4">
+						<Button
+							className="w-1/2 h-[55px] bg-[#6f006c] rounded-lg overflow-hidden border border-solid border-black font-['Inter',Helvetica] font-semibold text-white text-xl tracking-[-0.40px] leading-7"
+							onClick={() => {
+								setShoppingAt && setShoppingAt("Zepto");
+								onNavigate && onNavigate("checkout");
+							}}
+						>
+							Zepto
+						</Button>
+						<Button
+							className="w-1/2 h-[55px] bg-[#fbd30f] rounded-lg overflow-hidden font-['Inter',Helvetica] font-semibold text-black text-xl tracking-[-0.40px] leading-7"
+							onClick={() => {
+								setShoppingAt && setShoppingAt("Blinkit");
+								onNavigate && onNavigate("checkout");
+							}}
+						>
+							Blinkit
+						</Button>
+					</div>
+
+					{/* Frequently Bought Items Section */}
+					<div className="px-4 mb-4">
+						<h2 className="font-semibold text-base tracking-[-0.32px] text-black leading-5 mb-2">
+							Frequently Bought Items
+						</h2>
+						<div className="flex overflow-x-auto py-2">
+							{frequentlyBoughtItems.map((item) => (
+								<div
+									key={item.id}
+									className="min-w-[80px] h-[90px] bg-gray-50 rounded-lg shadow-md m-2 flex flex-col items-center"
 								>
-									Add to Cart
-								</Button>
-							</div>
-						))}
-					</div>
-				</div>
-				{/* Divider */}
-				<div className="absolute w-full h-px top-[380px] left-0 bg-gray-200" />
-				{/* Wishlist Section */}
-				<div className="absolute w-[375px] top-[392px] left-0">
-					<div className="px-4">
-						<h2 className="text-lg font-semibold">Your Wishlist</h2>
-					</div>
-					<div className="flex flex-col py-2">
-						{wishlistItems.map((item) => (
-							<div
-								key={item.id}
-								className="w-full h-16 bg-gray-50 rounded-lg shadow-md my-2 flex items-center justify-between px-4"
-							>
-								<div className="flex items-center">
-									<div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
-										<img
-											className="w-6 h-6 text-gray-500"
-											alt="Inventory"
-											src="/box.svg"
-										/>
-									</div>
-									<div className="ml-4">
-										<p className="text-sm text-gray-500">{item.name}</p>
-										<p className="text-lg font-semibold">
-											Quantity: {item.quantity}
-										</p>
-									</div>
+									<img
+										className="w-[48px] h-[48px] object-cover rounded-full mt-2"
+										alt={item.name}
+										src={item.image.startsWith('/') ? item.image : `/` + item.image}
+									/>
+									<p className="text-center font-medium text-xs mt-2 w-full max-w-[120px] truncate">{item.name}</p>
 								</div>
-								<Button
-									variant="default"
-									className="rounded-full w-[100px] h-10"
+							))}
+						</div>
+					</div>
+
+					{/* Divider */}
+					<div className="w-full h-px bg-gray-200 mb-4" />
+
+					{/* Wishlist Section */}
+					<div className="px-4 mb-4">
+						<h2 className="font-semibold text-base tracking-[-0.32px] text-black leading-5 mb-2">
+							Your Wishlist
+						</h2>
+						<div className="flex flex-col py-2">
+							{wishlistItems.map((item) => (
+								<div
+									key={item.id}
+									className="w-full h-16 bg-gray-50 rounded-lg shadow-md my-2 flex items-center justify-between px-4"
 								>
-									Move to Cart
-								</Button>
-							</div>
-						))}
+									<div className="flex items-center">
+										<div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center overflow-hidden">
+											<img
+												className="w-10 h-10 object-cover rounded-full"
+												alt={item.name}
+												src={item.image}
+											/>
+										</div>
+										<div className="ml-4">
+											<p className="text-base font-semibold text-black">{item.name}</p>
+											<p className="text-base text-gray-500">Quantity: {item.quantity}</p>
+										</div>
+									</div>
+									<Button
+										variant="default"
+										className="rounded-full w-[100px] h-10"
+									>
+										Move to Cart
+									</Button>
+								</div>
+							))}
+						</div>
 					</div>
 				</div>
+
+				{/* Microphone button (absolute above bottom nav) */}
+				<div className="absolute bottom-[152px] right-4">
+					<Button
+						className="w-[75px] h-[75px] rounded-full bg-[#cce8f3] flex items-center justify-center relative"
+						size="icon"
+					>
+						{/* Dark blue mic icon on top of the light blue circle */}
+						<img
+							src="/mic.svg"
+							alt="Mic"
+							className="w-[38px] h-[35px] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+							style={{ filter: 'invert(13%) sepia(98%) saturate(7477%) hue-rotate(217deg) brightness(90%) contrast(120%)' }}
+						/>
+					</Button>
+				</div>
+
 				{/* Bottom Navigation */}
-				<div className="absolute bottom-0 left-0 w-full bg-white shadow-[0px_-0.5px_0px_#0000001a] backdrop-blur-[10px]">
-					<div className="flex justify-around items-center h-11">
-						<button onClick={() => onNavigate && onNavigate("home")}>
-							<img
-								className="w-6 h-6"
-								alt="Home"
-								src="/icon-tab-home-fill.svg"
-							/>
-						</button>
-						<button onClick={() => onNavigate && onNavigate("inventory")}>
-							<img
-								className="w-[29px] h-[27px]"
-								alt="Inventory"
-								src="/box.svg"
-							/>
-						</button>
-						<button onClick={() => onNavigate && onNavigate("tobuy")}>
-							<img
-								className="w-6 h-6"
-								alt="Cart"
-								src="/iconmonstr-shopping-cart-2-1.svg"
-							/>
-						</button>
-					</div>
-					<div className="h-[34px] flex justify-center items-center">
-						<div className="w-[134px] h-[5px] bg-black rounded-[100px]" />
-					</div>
-				</div>
+				<nav className="w-full flex justify-around items-center h-14 border-t border-gray-200 bg-white fixed bottom-0 left-1/2 -translate-x-1/2 max-w-[375px]">
+					<button onClick={() => onNavigate && onNavigate("home")}>
+						<HomeIcon className="w-6 h-6" />
+					</button>
+					<button onClick={() => onNavigate && onNavigate("inventory")}>
+						<PackageIcon className="w-6 h-6" />
+					</button>
+					<button onClick={() => onNavigate && onNavigate("tobuy")}>
+						<ShoppingCartIcon className="w-6 h-6" />
+					</button>
+					<button onClick={() => onNavigate && onNavigate("activity")}>
+						<BellIcon className="w-6 h-6" />
+					</button>
+					<button onClick={() => onNavigate && onNavigate("profile")}>
+						<UserIcon className="w-6 h-6" />
+					</button>
+				</nav>
 			</div>
 		</div>
 	);

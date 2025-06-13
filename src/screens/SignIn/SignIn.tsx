@@ -1,10 +1,69 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button } from "../../components/ui/button";
 import { Card } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Separator } from "../../components/ui/separator";
 
 export const SignIn = ({ onContinue }: { onContinue?: () => void }): JSX.Element => {
+  const [currentTime, setCurrentTime] = useState<string>("");
+  const [googleReady, setGoogleReady] = useState(false);
+  const googleScriptLoaded = useRef(false);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes();
+      setCurrentTime(
+        `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}`
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Google OAuth client ID (replace with your actual client ID)
+  const GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID";
+
+  // Load Google Identity Services script
+  useEffect(() => {
+    if (googleScriptLoaded.current) return;
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.id = "google-identity-services";
+    script.onload = () => {
+      googleScriptLoaded.current = true;
+      setGoogleReady(true);
+    };
+    document.body.appendChild(script);
+    // Do NOT remove the script on unmount (Google recommends keeping it loaded)
+    // return () => { document.body.removeChild(script); };
+  }, []);
+
+  // Google sign-in handler
+  const handleGoogleSignIn = () => {
+    if (!googleReady) {
+      alert("Google sign-in is not ready yet. Please wait a moment and try again.");
+      return;
+    }
+    if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+      window.google.accounts.oauth2.initPopup({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: "email profile",
+        callback: (response: any) => {
+          // Handle the response here (e.g., send to backend or update UI)
+          console.log("Google sign-in response:", response);
+          if (onContinue) onContinue();
+        },
+      });
+    } else {
+      alert("Google Identity Services not loaded. Please try again.");
+    }
+  };
+
   return (
     <div className="bg-[#e5f3fa] flex flex-row justify-center w-full min-h-screen">
       <div className="bg-[#e5f3fa] w-[375px] h-[812px] relative">
@@ -31,7 +90,18 @@ export const SignIn = ({ onContinue }: { onContinue?: () => void }): JSX.Element
               className="h-10 px-4 py-2 bg-white rounded-lg border border-solid border-[#dfdfdf] text-sm font-normal text-[#828282]"
               placeholder="email@domain.com"
             />
-            <Button className="w-full h-10 bg-black rounded-lg text-white text-sm font-medium" onClick={onContinue}>
+            {/* Password Field */}
+            <div className="flex flex-col w-full items-start gap-4">
+              <Input
+                type="password"
+                placeholder="Password"
+                className="w-full h-10 px-4 py-2 bg-white rounded-lg border border-solid border-[#dfdfdf] text-sm font-normal text-[#828282]"
+              />
+            </div>
+            <Button
+              className="w-full h-10 bg-black rounded-lg text-white text-sm font-medium"
+              onClick={onContinue}
+            >
               Continue
             </Button>
           </div>
@@ -46,7 +116,11 @@ export const SignIn = ({ onContinue }: { onContinue?: () => void }): JSX.Element
           </div>
 
           {/* Google sign-in */}
-          <Card className="w-full h-10 bg-white rounded-lg flex items-center justify-center">
+          <Card
+            className={`w-full h-10 bg-white rounded-lg flex items-center justify-center cursor-pointer transition ${!googleReady ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
+            onClick={googleReady ? handleGoogleSignIn : undefined}
+            aria-disabled={!googleReady}
+          >
             <div className="flex items-center gap-2">
               <img className="w-5 h-5" alt="Logo" src="/logo.svg" />
               <span className="font-medium text-black text-sm leading-[19.6px]">
@@ -71,26 +145,22 @@ export const SignIn = ({ onContinue }: { onContinue?: () => void }): JSX.Element
           FridgePal
         </h1>
 
-        {/* Status bar */}
-        <div className="absolute w-full h-11 top-0 left-0">
-          <div className="absolute w-[67px] h-[11px] top-[17px] right-[14px] flex justify-end">
+        {/* Status Bar */}
+        <div className="w-full h-11 flex justify-between items-center px-5">
+          <div className="w-[54px] h-[21px] flex items-center justify-start">
+            <span className="font-semibold text-black text-base tracking-tight">
+              {currentTime}
+            </span>
+          </div>
+          <div className="flex items-center gap-1">
             <img
               className="w-[17px] h-[11px]"
               alt="Mobile signal"
               src="/mobile-signal.svg"
             />
-            <img
-              className="w-[15px] h-[11px] ml-[5px]"
-              alt="Wifi"
-              src="/wifi.svg"
-            />
-            <img
-              className="w-6 h-[11px] ml-[5px]"
-              alt="Battery"
-              src="/battery.png"
-            />
+            <img className="w-[15px] h-[11px]" alt="Wifi" src="/wifi.svg" />
+            <img className="w-6 h-[11px]" alt="Battery" src="/battery.png" />
           </div>
-          <div className="absolute w-[54px] h-[21px] top-3 left-[21px] bg-[url(/time.svg)] bg-[100%_100%]" />
         </div>
 
         {/* App logo */}
